@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD de Pessoas</title>
+    
+    <link rel="stylesheet" href="style_formulario.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <h2>CRUD Pessoas</h2>
+    <div class="form_input">
+    <!-- Formulário para criar uma nova pessoa -->
+    <form id="createPersonForm">
+        <div>
+            <label for="id">ID</label>
+            <input type="number" id="id" disabled>
+        </div>
+        <div>
+            <label for="nome">Nome</label>
+            <input type="text" id="nome" placeholder="Nome" required>
+        </div>
+        <div>
+            <label for="sobrenome">Sobrenome</label>
+            <input type="text" id="sobrenome" placeholder="Sobrenome" required>
+        </div>
+        <div>
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="Email" required>
+        </div>
+        <div>
+
+            <label for="idade">Idade</label>
+            <input type="number" id="idade" placeholder="Idade" required>
+        </div>
+        <button id="bntCancelar" type="button">Cancelar</button>
+        <button id="bntSalvar" type="button">Salvar</button>
+        <button id="bntCadastrar" type="button">Cadastrar</button>
+
+    </form>
+ 
+</div>
+
+
+    <hr>
+
+
+    <div class="container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nome</th>
+                    <th>Sobrenome</th>
+                    <th>Email</th>
+                    <th>Idade</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="listaPessoas">
+                <!-- As pessoas cadastradas serão listadas aqui -->
+            </tbody>
+        </table>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

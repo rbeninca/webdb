@@ -1,0 +1,80 @@
+/* Estilo geral do formulário */
+.form_input {
+    max-width: 500px;
+    margin: 0 auto; 
+    padding: 20px; 
+    background: #f8f9fa; 
+    border-radius: 8px; 
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+  }
+  
+  /* Estilos para as divs que envolvem cada par label-input */
+  .form_input div {
+    display: flex; 
+    
+    
+    align-items: baseline;
+     
+  }
+  
+  /* Estilo dos rótulos (labels) */
+  label {
+    width: 100px;
+    margin-bottom: 0px; 
+    color: #333; 
+  }
+  
+  /* Estilo para os campos de input e botões */
+  input[type="text"],
+  input[type="email"],
+  input[type="number"],
+  button {
+    width: 100%; 
+    padding: 10px;
+    border: 1px solid #ced4da; 
+    border-radius: 4px; 
+    margin-bottom: 10px;
+  }
+  
+  /* Estilo para os campos de input desabilitados */
+  input:disabled {
+    background: #e9ecef;
+    color: #6c757d; 
+  }
+  
+  /* Estilo para o botão Salvar */
+  #bntSalvar {
+    background-color: #007bff; 
+    color: white; 
+    border: none; 
+    cursor: pointer;
+    margin-right: 5px; 
+  }
+  #bntSalvar:disabled{
+    background-color: #565b61; 
+    color: white; 
+    border: none; 
+    cursor: pointer;
+    margin-right: 5px; 
+    opacity: 0.5;
+  }
+  
+  /* Estilo para o botão Cadastrar */
+  #bntCadastrar {
+    background-color: #28a745; 
+    color: white; 
+    border: none; 
+    cursor: pointer; 
+  }
+  
+  /* Estilos para os botões ao passar o mouse por cima */
+  button:hover {
+    opacity: 0.8; 
+  }
+  
+  /* Estilo para o botão que está sendo clicado */
+  button:active {
+    transform: scale(0.98); 
+  }
+  
+  
