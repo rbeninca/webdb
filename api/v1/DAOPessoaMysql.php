@@ -1,5 +1,6 @@
 <?php
-class DaPessoaMysql {
+include_once 'Database.php';
+class DAOPessoaMysql {
     private $db;
     private $connection;
     
@@ -8,38 +9,33 @@ class DaPessoaMysql {
         $this->connection = $this->db->getConnection();
     }
 
-    public function inserir($nome, $sobrenome, $email, $idade) {
+    public function inserir(Pessoa $pessoa) {
         // Preparar o statement para inserção de dados no banco
         $query = "INSERT INTO pessoas (nome, sobrenome, email, idade) VALUES (:nome, :sobrenome, :email, :idade)";
         $stmt = $this->connection->prepare($query);
 
-
-        //Sanetização dados 
-        $nome = htmlspecialchars(strip_tags($nome));
-        $sobrenome = htmlspecialchars(strip_tags($sobrenome));
-        $email = htmlspecialchars(strip_tags($email));
-        $idade = htmlspecialchars(strip_tags($idade));
         //bind data
-        $stmt->bindParam(":nome", $nome);
-        $stmt->bindParam(":sobrenome", $sobrenome);
-        $stmt->bindParam(":email", $email);
-        $stmt->bindParam(":idade", $idade);
-
+        $stmt->bindParam(":nome", $pessoa->getNome());
+        $stmt->bindParam(":sobrenome", $pessoa->getSobrenome());
+        $stmt->bindParam(":email", $pessoa->getEmail());
+        $stmt->bindParam(":idade", $pessoa->getIdade());
+        //Return id of inserted row
         if ($stmt->execute()) {
-            return true;
+           //  convert string to int 
+              return (int)$this->connection->lastInsertId(); 
         }
         return false;
+        
     }
 
 
-    public function listar(){
+    public function listarTodos(){
         $query = "SELECT * FROM pessoas";
         $stmt = $this->connection->prepare($query);
         $stmt->execute();
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        //retorna um array de pessoas em formato json
-
-
+        //Retorna lista de objetos Pessoa
+        $stmt->setFetchMode(PDO::FETCH_CLASS, 'Pessoa');
+        $result = $stmt->fetchAll();
         return  $result;
     }
     //metodo para deletar uma pessoa que recebe id como parametro 
@@ -53,18 +49,20 @@ class DaPessoaMysql {
         return false;
     }
     //metodo para para atualizar dados de umas pessoa
-    public function update($id, $nome, $sobrenome, $email, $idade){
+    public function update($pessoa){
         $query = "UPDATE pessoas SET nome = :nome, sobrenome = :sobrenome, email = :email, idade = :idade WHERE id = :id";
         $stmt = $this->connection->prepare($query);
-        $stmt->bindParam(":id", $id);
-        $stmt->bindParam(":nome", $nome);
-        $stmt->bindParam(":sobrenome", $sobrenome);
-        $stmt->bindParam(":email", $email);
-        $stmt->bindParam(":idade", $idade);
+
+        $stmt->bindParam(":id", $pessoa->getId());
+        $stmt->bindParam(":nome", $pessoa->getNome());
+        $stmt->bindParam(":sobrenome", $pessoa->getSobrenome());
+        $stmt->bindParam(":email", $pessoa->getEmail());
+        $stmt->bindParam(":idade", $pessoa->getIdade());
         if ($stmt->execute()) {
             return true;
         }
         return false;
+        
     }
 }
 

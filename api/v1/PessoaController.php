@@ -1,70 +1,40 @@
 <?php
+include_once 'PersistenciaPessoa.php';
+include_once 'Pessoa.php';
+
 class PessoaController {
-    private $db;
-    private $connection;
-
+    private $PersistenciaPessoa;
     public function __construct() {
-        $this->db = new Database();
-        $this->connection = $this->db->getConnection();
+        $this->PersistenciaPessoa = new PersistenciaPessoa();
     }
+    
 
-    public function create($nome, $sobrenome, $email, $idade) {
-        // Preparar o statement para inserção de dados no banco
-        $query = "INSERT INTO pessoas (nome, sobrenome, email, idade) VALUES (:nome, :sobrenome, :email, :idade)";
-        $stmt = $this->connection->prepare($query);
-
-
-        //Sanetização dados 
-        $nome = htmlspecialchars(strip_tags($nome));
-        $sobrenome = htmlspecialchars(strip_tags($sobrenome));
-        $email = htmlspecialchars(strip_tags($email));
-        $idade = htmlspecialchars(strip_tags($idade));
-        //bind data
-        $stmt->bindParam(":nome", $nome);
-        $stmt->bindParam(":sobrenome", $sobrenome);
-        $stmt->bindParam(":email", $email);
-        $stmt->bindParam(":idade", $idade);
-
-        if ($stmt->execute()) {
-            return true;
-        }
-        return false;
+    public function cadastrarNovaPessoa(Pessoa $pessoa) {
+        //Sanetizaação dos dados
+        $pessoa->nome=filter_var($pessoa->getNome(), FILTER_SANITIZE_STRING);
+        $pessoa->sobrenome=filter_var($pessoa->getSobrenome(), FILTER_SANITIZE_STRING);
+        $pessoa->email=filter_var($pessoa->getEmail(), FILTER_SANITIZE_EMAIL);
+        $pessoa->idade=filter_var($pessoa->getIdade(), FILTER_SANITIZE_NUMBER_INT);
+    
+        //Chama o metodo inserir da classe PersistenciaPessoa
+        return $this->PersistenciaPessoa->inserir($pessoa);    
+        
     }
 
 
-    public function list(){
-        $query = "SELECT * FROM pessoas";
-        $stmt = $this->connection->prepare($query);
-        $stmt->execute();
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        //retorna um array de pessoas em formato json
-
-
+    public function recuperaListaPessoas(){
+        $result=$this->PersistenciaPessoa->listarTodos();
+        //transforma o array de objetos em um array de arrays
+        $result = json_decode(json_encode($result), true);
         return  $result;
     }
     //metodo para deletar uma pessoa que recebe id como parametro 
     public function delete($id){
-        $query = "DELETE FROM pessoas WHERE id = :id";
-        $stmt = $this->connection->prepare($query);
-        $stmt->bindParam(":id", $id);
-        if ($stmt->execute()) {
-            return true;
-        }
-        return false;
+        return $this->PersistenciaPessoa->delete($id);
     }
     //metodo para para atualizar dados de umas pessoa
-    public function update($id, $nome, $sobrenome, $email, $idade){
-        $query = "UPDATE pessoas SET nome = :nome, sobrenome = :sobrenome, email = :email, idade = :idade WHERE id = :id";
-        $stmt = $this->connection->prepare($query);
-        $stmt->bindParam(":id", $id);
-        $stmt->bindParam(":nome", $nome);
-        $stmt->bindParam(":sobrenome", $sobrenome);
-        $stmt->bindParam(":email", $email);
-        $stmt->bindParam(":idade", $idade);
-        if ($stmt->execute()) {
-            return true;
-        }
-        return false;
+    public function update($pessoa){
+         return $this->PersistenciaPessoa->update($pessoa);
     }
 
 

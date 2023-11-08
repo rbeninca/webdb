@@ -82,7 +82,9 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(data => {
                 // Atualizar a lista de pessoas
                 fetchListasPessoas();
-
+                if (data.mensagem) {
+                    alert(data.mensagem);
+                }
             })
             .catch(error => console.error('Erro ao criar pessoa:', error));
     }
@@ -99,6 +101,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (!response.ok) {
                     throw new Error(`Erro HTTP! status: ${response.status}`);
                 } else if (response.headers.get("Content-Type").includes("application/json")) {
+                    
                     return response.json();
                 } else {
                     return response.text().then(text => { throw new Error(text) });
@@ -107,6 +110,9 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(data => {
                 // Atualizar a lista de pessoas
                 fetchListasPessoas();
+                if (data.mensagem) {
+                    alert(data.mensagem);
+                }
             })
             .catch(error => console.error('Erro ao editar pessoa:', error));
     }
@@ -155,7 +161,11 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 
-    /* Adicionar evento de click no botão cadastrar do formulario, para criar pessoa nova */
+
+
+
+    /* Eventos da interface */
+    /* Botão Cadastrar*/
     bntCadastrar.addEventListener('click', function (e) {
         console.log('clicouEmCadastrar');
         pessoa = null;
@@ -164,12 +174,10 @@ document.addEventListener('DOMContentLoaded', function () {
         pessoa.sobrenome = document.getElementById('sobrenome').value;
         pessoa.email = document.getElementById('email').value;
         pessoa.idade = document.getElementById('idade').value;
-        /*Na chamda cadastrarPessoa, seria mais adequado passar o objeto pessoa como parametro, para facilitar a leitura do codigo,
-        foi passado os atributos do objeto pessoa como parametros, assim facilita a compreesão */
         fetchCadastrarPessoa(pessoa.nome, pessoa.sobrenome, pessoa.email, pessoa.idade);
-        
+   
     });
-    /* Adicionar evento de click no botão salvar, para editar pessoa em edição*/
+    /* Botão Salvar*/
     bntSalvar.addEventListener('click', function (e) {
         console.log('clicouEmSalvar');
         const id = document.getElementById('id').value;
@@ -192,14 +200,14 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     );
 
-    /* Adicionar evento de click no botão excluir, para excluir pessoa */
+    /* Botão Excluir*/
     document.getElementById('listaPessoas').addEventListener('click', function (e) {
         if (e.target.className == 'bntExcluir') {
             const id = e.target.parentElement.parentElement.firstChild.textContent;
             fetchDeletePessoa(id);
         }
     });
-    /* Adicionar evento de click no botão cancelar, para cancelar a edição de pessoa */
+    /* Botão Cancelar*/
     bntCancelar.addEventListener('click', function (e) {
         //limpando os campos
         document.getElementById('id').value = '';
@@ -214,8 +222,7 @@ document.addEventListener('DOMContentLoaded', function () {
         bntCancelar.style.display = 'none';
     });
 
-    /* Adicionar evento de click na lista depessoas, e caso seja elemento clicado seja bntEdit, 
-    é feita carga dos dados da linha para campos input*/
+    /* Botões Editar*/
     document.getElementById('listaPessoas').addEventListener('click', function (e) {
         //Recupera o elemento pai do elemento clicado, no caso a linha da tabela tr
         let tr = e.target.parentElement.parentElement;
