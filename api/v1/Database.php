@@ -1,7 +1,7 @@
 <?php
 class Database {
     private $host = "mysql"; // Nome do serviço no docker-compose
-    private $db_name = "database";
+    private $db_name = "crud_ppi";
     private $username = "root";
     private $password = "rootpass";
     public $conn;
